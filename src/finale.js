@@ -105,13 +105,16 @@ export function finaleTargets(positions, layout, random = Math.random) {
   return targets;
 }
 
-// The lock-up image over the stage: placed to match the dots, and faded in and out.
-export function createLogo(element) {
+// The lock-up image over the stage: placed to match the dots, and faded in and out. `followers` are
+// other elements (the feedback link and QR code) that fade and hide together with it.
+export function createLogo(element, followers = []) {
   let amount = 0;
   let running = null;
   const apply = () => {
-    element.style.opacity = String(amount);
-    element.hidden = amount <= 0.001;
+    for (const e of [element, ...followers]) {
+      e.style.opacity = String(amount);
+      e.hidden = amount <= 0.001;
+    }
   };
   apply();
   return {

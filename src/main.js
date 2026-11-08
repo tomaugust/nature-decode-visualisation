@@ -86,7 +86,7 @@ const frame = scene
     },
   })
   : null;
-const logo = createLogo(document.getElementById('logo'));
+const logo = createLogo(document.getElementById('logo'), [document.getElementById('feedback')]);
 const rotation = scene
   ? createRotation({ element: document.getElementById('canvas-wrap'), pivot: scene.pivot })
   : null;

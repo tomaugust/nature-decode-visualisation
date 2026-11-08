@@ -321,6 +321,35 @@ button:focus-visible {
 }
 .logo[hidden] { display: none; }
 
+/* The feedback link and QR code on the last slide, in the bottom left corner. They fade in with the
+   logo (see createLogo). The code sits on white, with its own quiet zone, so phones can read it. */
+.feedback {
+  position: absolute;
+  left: 1.5rem;
+  bottom: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.5rem;
+  opacity: 0;
+}
+.feedback[hidden] { display: none; }
+.feedback-text { margin: 0; max-width: 9rem; font-size: 0.9375rem; line-height: 1.3; }
+.feedback-text a { color: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.feedback-text a:hover { color: var(--fg); }
+.feedback-qr {
+  display: block;
+  width: 9rem;
+  height: 9rem;
+  border-radius: 4px;
+  background: #fff;
+}
+/* a phone on its side is short, and the logo is wider than it is tall: a smaller code keeps clear of it */
+@media (max-height: 500px) {
+  .feedback-text { max-width: 7rem; font-size: 0.8125rem; }
+  .feedback-qr { width: 7rem; height: 7rem; }
+}
+
 /* Tag line and label pointing at a cube */
 .callouts {
   position: absolute;
