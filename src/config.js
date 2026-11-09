@@ -383,3 +383,50 @@ export const STEPS = [
     canvasLabel: 'The cubes form the dots of the UKCEH logo. Our planet. Decoded.',
   },
 ];
+
+// Sound (src/audio). The bed is one looping pad per step, with a few bell notes. `loop` is its length in
+// seconds, `tail` the reverb tail drawn past the end and folded back onto the start, `rms` its level in dBFS
+// (about 12 dB below the sound effects). Per step: `notes` the pad, `tex` the bells per loop, `air` the
+// breath of noise, `level` an offset in dB, `seed` which bells fall when.
+export const BED = {
+  loop: 10,
+  tail: 5,
+  sampleRate: 22050, // the bed is soft and low, so it is drawn at half rate to save time
+  rms: -34,
+  bells: ['A4', 'C5', 'E5', 'G5', 'A5', 'C6'],
+  steps: {
+    intro: { notes: ['A2', 'E3'], tex: 0, air: 0.35, level: -6, seed: 1 },
+    data: { notes: ['A2', 'E3', 'A3'], tex: 5, air: 0.6, level: 0, seed: 2 },
+    categorise: { notes: ['A2', 'E3', 'A3'], tex: 7, air: 0.6, level: 0, seed: 3 },
+    sort: { notes: ['A2', 'E3', 'A3', 'C4'], tex: 8, air: 0.6, level: 0.5, seed: 4 },
+    arrange: { notes: ['A2', 'E3', 'A3', 'C4'], tex: 3, air: 0.4, level: -1.5, seed: 5 },
+    insight1: { notes: ['A2', 'E3', 'A3', 'C4', 'E4'], tex: 2, air: 0.3, level: -1, seed: 6 },
+    insight2: { notes: ['A2', 'E3', 'G3', 'C4', 'E4'], tex: 2, air: 0.3, level: -1, seed: 7 },
+    insight3: { notes: ['A2', 'E3', 'B3', 'E4', 'G4'], tex: 2, air: 0.3, level: -1, seed: 8 },
+    conclusion: { notes: ['A2', 'E3', 'A3', 'C4', 'E4', 'A4'], tex: 2, air: 0.3, level: 0, seed: 9 },
+    finale: { notes: ['A2', 'E3', 'A3', 'C4', 'E4', 'A4'], tex: 0, air: 0.2, level: -1, seed: 10 },
+  },
+  crossfade: 2.5, // seconds between one step's bed and the next
+  finaleFadeAt: 3.5, // seconds into the finale when the bed starts to fade out...
+  finaleFade: 5, // ...over this many seconds
+};
+
+export const SOUND = {
+  master: 0.35, // overall level, 0 to 1
+  voices: 32, // most sound effects playing at once
+  impactMinSpeed: 3, // slower contacts make no sound (cube units a second). This is the speed the cubes have really been travelling at (see physics.js), so a settling pile or a heap held together by the Sort pull is below it
+  impactFullSpeed: 20, // contacts at or above this speed are played at full strength: cubes thrown or poured in reach this and more
+  impactCurve: 1.6, // loudness follows speed: strength = (how far between min and full speed) ^ this. Above 1, a gentle knock is much quieter than a hard one
+  impactQuiet: 0.04, // the gain of the gentlest knock that sounds...
+  impactLoud: 0.9, // ...and of a knock at full speed
+  impactsPerStep: 2, // most impacts that sound in one physics step (a step is 1/60 s); a pour of cubes is a patter, not a wall
+  impactSpread: 0.016, // seconds: each impact is placed at a random moment within its step, so they do not land together
+  burst: 6, // a sustained rush of contacts (the Sort step) may sound at most `rate` impacts a second, after a burst of this many:
+  rate: 20, // a pour is a patter, but cubes sliding into heaps for seconds must not become a roar
+  densityTau: 0.3, // seconds over which a busy stretch of impacts is remembered...
+  densityRef: 3, // ...an impact is played at 1 / sqrt(1 + recent impacts / this) of its strength, so a pour does not pile up into a wall
+  clackLength: 0.2, // seconds of each sound that are played: the rest of the drawn buffer is silence
+  thudLength: 0.4,
+  duckDb: -2, // the bed dips this far under a hard impact...
+  duckAbove: 0.6, // ...when its strength (0 to 1) is at least this
+};
